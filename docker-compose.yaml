@@ -1,0 +1,14 @@
+version: "3.8"
+
+# @todo: extract password, port and db name into env file
+services:
+  db:
+    image: mysql:latest
+    container_name: db
+    ports:
+      - "33306:3306"
+    volumes:
+      - ./migrations:/migrations
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: scootin_aboot
