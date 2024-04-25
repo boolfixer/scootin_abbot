@@ -1,5 +1,11 @@
 package model
 
+import "github.com/google/uuid"
+
 type Scooter struct {
-	// todo: implement
+	Id        uuid.UUID
+	Name      string
+	Color     string
+	Latitude  int
+	Longitude int
 }
