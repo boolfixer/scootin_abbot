@@ -4,11 +4,16 @@ import (
 	"go.uber.org/dig"
 	"main/internal/database"
 	"main/internal/repository"
+	"main/internal/scooter_handler"
 )
 
 var constructors = []interface{}{
 	database.NewDBConnection,
 	repository.NewScooterRepository,
+	repository.NewScooterOccupationRepository,
+	scooter_handler.NewSearchScootersHandler,
+	scooter_handler.NewOccupyScooterHandler,
+	scooter_handler.NewReleaseScooterHandler,
 }
 
 func Bootstrap() *dig.Container {
