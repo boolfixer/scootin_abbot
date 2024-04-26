@@ -1,0 +1,1 @@
+CREATE DATABASE scootin_aboot;

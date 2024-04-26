@@ -8,7 +8,7 @@ services:
     ports:
       - "33306:3306"
     volumes:
-      - ./migrations:/migrations
+      - ./migration:/migration
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: scootin_aboot
