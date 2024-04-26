@@ -2,12 +2,14 @@ package container
 
 import (
 	"go.uber.org/dig"
+	"main/internal/controller"
 	"main/internal/database"
 	"main/internal/repository"
 	"main/internal/scooter_handler"
 )
 
 var constructors = []interface{}{
+	controller.NewScooterController,
 	database.NewDBConnection,
 	repository.NewScooterRepository,
 	repository.NewScooterOccupationRepository,

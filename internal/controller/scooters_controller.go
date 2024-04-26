@@ -1,15 +1,36 @@
 package controller
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"main/internal/scooter_handler"
+)
 
-func ScootersSearch(c *gin.Context) {
-	// todo: implement
+type ScooterController struct {
+	occupyScooterHandler  scooter_handler.OccupyScooterHandler
+	releaseScooterHandler scooter_handler.ReleaseScooterHandler
+	searchScootersHandler scooter_handler.SearchScootersHandler
 }
 
-func ScooterOccupy(c *gin.Context) {
-	// todo: implement
+func (c ScooterController) Search(context *gin.Context) {
+
 }
 
-func ScooterFree(c *gin.Context) {
-	// todo: implement
+func (c ScooterController) Occupy(context *gin.Context) {
+
+}
+
+func (c ScooterController) Release(context *gin.Context) {
+
+}
+
+func NewScooterController(
+	occupyScooterHandler scooter_handler.OccupyScooterHandler,
+	releaseScooterHandler scooter_handler.ReleaseScooterHandler,
+	searchScootersHandler scooter_handler.SearchScootersHandler,
+) ScooterController {
+	return ScooterController{
+		occupyScooterHandler:  occupyScooterHandler,
+		releaseScooterHandler: releaseScooterHandler,
+		searchScootersHandler: searchScootersHandler,
+	}
 }
