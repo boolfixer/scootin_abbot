@@ -7,7 +7,7 @@ import (
 )
 
 type ScooterRepository interface {
-	FindScootersByStatusAndLocation(status bool, latitude float64, longitude float64) []model.Scooter
+	FindScootersByStatusAndLocation(latitude int, longitude int) []model.Scooter
 	SetScooterStatus(scooterUuid uuid.UUID, status bool)
 }
 
@@ -15,11 +15,11 @@ type mysqlScooterRepository struct {
 	db *sql.DB
 }
 
-func (r *mysqlScooterRepository) FindScootersByStatusAndLocation(status bool, latitude float64, longitude float64) []model.Scooter {
+func (r mysqlScooterRepository) FindScootersByStatusAndLocation(latitude int, longitude int) []model.Scooter {
 	return []model.Scooter{}
 }
 
-func (r *mysqlScooterRepository) SetScooterStatus(scooterUuid uuid.UUID, status bool) {
+func (r mysqlScooterRepository) SetScooterStatus(scooterUuid uuid.UUID, status bool) {
 	return
 }
 
