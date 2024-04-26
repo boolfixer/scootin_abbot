@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
 	"main/internal/model"
 )
@@ -24,22 +23,6 @@ func (r *mysqlScooterRepository) SetScooterStatus(scooterUuid uuid.UUID, status 
 	return
 }
 
-func NewScooterRepository() ScooterRepository {
-	// @todo: fetch config from env file
-	cfg := mysql.Config{
-		//User:   os.Getenv("DBUSER"),
-		User: "root",
-		//Passwd: os.Getenv("DBPASS"),
-		Passwd: "root",
-		Net:    "tcp",
-		Addr:   "127.0.0.1:33306",
-		DBName: "scootin_aboot",
-	}
-	db, err := sql.Open("mysql", cfg.FormatDSN())
-
-	if err != nil {
-		panic(err.Error())
-	}
-
+func NewScooterRepository(db *sql.DB) ScooterRepository {
 	return &mysqlScooterRepository{db: db}
 }
