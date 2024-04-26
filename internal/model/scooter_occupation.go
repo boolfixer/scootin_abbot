@@ -10,5 +10,5 @@ type ScooterOccupation struct {
 	ScooterId  uuid.UUID
 	UserId     uuid.UUID
 	OccupiedAt time.Time
-	ReleaseAt  time.Time
+	ReleasedAt time.Time
 }
