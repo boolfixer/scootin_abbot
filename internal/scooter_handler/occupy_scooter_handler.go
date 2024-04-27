@@ -14,6 +14,6 @@ func (h OccupyScooterHandler) Handle(scooterUuid uuid.UUID, userUuid uuid.UUID) 
 	h.scooterOccupationRepository.Create(scooterUuid, userUuid, time.Now())
 }
 
-func NewOccupyScooterHandler(scooterOccupationRepository repository.ScooterOccupationRepository) OccupyScooterHandler {
-	return OccupyScooterHandler{scooterOccupationRepository: scooterOccupationRepository}
+func NewOccupyScooterHandler(scooterOccupationRepository repository.ScooterOccupationRepository) *OccupyScooterHandler {
+	return &OccupyScooterHandler{scooterOccupationRepository: scooterOccupationRepository}
 }

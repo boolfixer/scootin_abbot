@@ -6,9 +6,9 @@ import (
 )
 
 type ScooterController struct {
-	occupyScooterHandler  scooter_handler.OccupyScooterHandler
-	releaseScooterHandler scooter_handler.ReleaseScooterHandler
-	searchScootersHandler scooter_handler.SearchScootersHandler
+	occupyScooterHandler  *scooter_handler.OccupyScooterHandler
+	releaseScooterHandler *scooter_handler.ReleaseScooterHandler
+	searchScootersHandler *scooter_handler.SearchScootersHandler
 }
 
 func (c ScooterController) Search(context *gin.Context) {
@@ -24,11 +24,11 @@ func (c ScooterController) Release(context *gin.Context) {
 }
 
 func NewScooterController(
-	occupyScooterHandler scooter_handler.OccupyScooterHandler,
-	releaseScooterHandler scooter_handler.ReleaseScooterHandler,
-	searchScootersHandler scooter_handler.SearchScootersHandler,
-) ScooterController {
-	return ScooterController{
+	occupyScooterHandler *scooter_handler.OccupyScooterHandler,
+	releaseScooterHandler *scooter_handler.ReleaseScooterHandler,
+	searchScootersHandler *scooter_handler.SearchScootersHandler,
+) *ScooterController {
+	return &ScooterController{
 		occupyScooterHandler:  occupyScooterHandler,
 		releaseScooterHandler: releaseScooterHandler,
 		searchScootersHandler: searchScootersHandler,

@@ -14,6 +14,6 @@ func (h ReleaseScooterHandler) Handle(scooterUuid uuid.UUID, userUuid uuid.UUID)
 	h.scooterOccupationRepository.SetReleasedAtByScooterUuidAndUserUuid(time.Now(), scooterUuid, userUuid)
 }
 
-func NewReleaseScooterHandler(scooterOccupationRepository repository.ScooterOccupationRepository) ReleaseScooterHandler {
-	return ReleaseScooterHandler{scooterOccupationRepository: scooterOccupationRepository}
+func NewReleaseScooterHandler(scooterOccupationRepository repository.ScooterOccupationRepository) *ReleaseScooterHandler {
+	return &ReleaseScooterHandler{scooterOccupationRepository: scooterOccupationRepository}
 }
