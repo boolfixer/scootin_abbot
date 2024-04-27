@@ -5,12 +5,20 @@ import (
 	"main/internal/repository"
 )
 
+const offset = 3
+
 type SearchScootersHandler struct {
 	scooterRepository repository.ScooterRepository
 }
 
 func (h *SearchScootersHandler) Handle(latitude int, longitude int) []model.Scooter {
-	return h.scooterRepository.FindScootersByStatusAndLocation(latitude, longitude)
+	// calculate start and end coordinates of search area
+	latitudeStart := latitude - offset
+	longitudeStart := longitude - offset
+	latitudeEnd := latitude + offset
+	longitudeEnd := longitude + offset
+
+	return h.scooterRepository.FindScootersByArea(latitudeStart, longitudeStart, latitudeEnd, longitudeEnd)
 }
 
 func NewSearchScootersHandler(scooterRepository repository.ScooterRepository) *SearchScootersHandler {

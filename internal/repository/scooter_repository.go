@@ -2,25 +2,51 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/google/uuid"
 	"main/internal/model"
 )
 
 type ScooterRepository interface {
-	FindScootersByStatusAndLocation(latitude int, longitude int) []model.Scooter
-	SetScooterStatus(scooterUuid uuid.UUID, status bool)
+	FindScootersByArea(latitudeStart int, longitudeStart int, latitudeEnd int, longitudeEnd int) []model.Scooter
 }
 
 type mysqlScooterRepository struct {
 	db *sql.DB
 }
 
-func (r mysqlScooterRepository) FindScootersByStatusAndLocation(latitude int, longitude int) []model.Scooter {
-	return []model.Scooter{}
-}
+func (r mysqlScooterRepository) FindScootersByArea(
+	latitudeStart int,
+	longitudeStart int,
+	latitudeEnd int,
+	longitudeEnd int,
+) []model.Scooter {
 
-func (r mysqlScooterRepository) SetScooterStatus(scooterUuid uuid.UUID, status bool) {
-	return
+	query := "SELECT * " +
+		"FROM scooters " +
+		"WHERE scooters.latitude >= ? " +
+		"AND scooters.longitude >= ? " +
+		"AND scooters.latitude <= ? " +
+		"AND scooters.longitude <= ?"
+
+	rows, err := r.db.Query(query, latitudeStart, longitudeStart, latitudeEnd, longitudeEnd)
+
+	if err != nil {
+		panic(err)
+	}
+
+	var scooters []model.Scooter
+
+	for rows.Next() {
+		var scooter = model.Scooter{}
+		err := rows.Scan(&scooter.Id, &scooter.Name, &scooter.Latitude, &scooter.Longitude)
+
+		if err != nil {
+			panic(err)
+		}
+
+		scooters = append(scooters, scooter)
+	}
+
+	return scooters
 }
 
 func NewScooterRepository(db *sql.DB) ScooterRepository {
