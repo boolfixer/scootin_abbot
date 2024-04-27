@@ -3,6 +3,8 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"main/internal/scooter_handler"
+	"net/http"
+	"strconv"
 )
 
 type ScooterController struct {
@@ -11,15 +13,27 @@ type ScooterController struct {
 	searchScootersHandler *scooter_handler.SearchScootersHandler
 }
 
-func (c ScooterController) Search(context *gin.Context) {
+func (c *ScooterController) Search(context *gin.Context) {
+	latitude, err := strconv.Atoi(context.Query("latitude"))
+
+	if err != nil {
+		panic(err)
+	}
+
+	longitude, err := strconv.Atoi(context.Query("longitude"))
+
+	if err != nil {
+		panic(err)
+	}
+
+	context.JSON(http.StatusOK, c.searchScootersHandler.Handle(latitude, longitude))
+}
+
+func (c *ScooterController) Occupy(context *gin.Context) {
 
 }
 
-func (c ScooterController) Occupy(context *gin.Context) {
-
-}
-
-func (c ScooterController) Release(context *gin.Context) {
+func (c *ScooterController) Release(context *gin.Context) {
 
 }
 
