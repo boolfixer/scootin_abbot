@@ -1,7 +1,7 @@
 USE scootin_aboot;
 
 CREATE TABLE users(
-    id BINARY(16) NOT NULL,
+    id BINARY(16) NOT NULL DEFAULT(UUID_TO_BIN(UUID())),
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     api_key VARCHAR(255) NOT NULL,

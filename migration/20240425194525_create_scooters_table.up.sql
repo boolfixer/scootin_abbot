@@ -1,7 +1,7 @@
 USE scootin_aboot;
 
 CREATE TABLE scooters(
-    id BINARY(16) NOT NULL,
+    id BINARY(16) NOT NULL DEFAULT(UUID_TO_BIN(UUID())),
     name VARCHAR(255) NOT NULL,
     latitude SMALLINT UNSIGNED NOT NULL,
     longitude SMALLINT UNSIGNED NOT NULL,
