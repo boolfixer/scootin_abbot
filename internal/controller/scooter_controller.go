@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"main/internal/dto"
 	"main/internal/model"
 	"main/internal/scooter_handler"
 	"net/http"
@@ -41,7 +42,17 @@ func (c *ScooterController) Occupy(context *gin.Context) {
 }
 
 func (c *ScooterController) Release(context *gin.Context) {
+	scooterId := uuid.MustParse(context.Param("id"))
+	user := context.MustGet("user").(model.User)
 
+	var scooterLocation dto.Location
+
+	if err := context.BindJSON(&scooterLocation); err != nil {
+		context.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	c.releaseScooterHandler.Handle(scooterId, user.Id, scooterLocation)
 }
 
 func NewScooterController(
