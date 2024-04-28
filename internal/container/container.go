@@ -5,6 +5,7 @@ import (
 	"main/internal/controller"
 	"main/internal/database"
 	"main/internal/http_server"
+	"main/internal/middleware"
 	"main/internal/repository"
 	"main/internal/scooter_handler"
 )
@@ -12,8 +13,10 @@ import (
 var constructors = []interface{}{
 	controller.NewScooterController,
 	database.NewDBConnection,
+	middleware.NewAuthMiddleware,
 	repository.NewScooterRepository,
 	repository.NewScooterOccupationRepository,
+	repository.NewUserRepository,
 	scooter_handler.NewSearchScootersHandler,
 	scooter_handler.NewOccupyScooterHandler,
 	scooter_handler.NewReleaseScooterHandler,
