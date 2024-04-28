@@ -3,23 +3,37 @@ package repository
 import (
 	"database/sql"
 	"github.com/google/uuid"
-	"time"
 )
 
 type ScooterOccupationRepository interface {
-	Create(scooterUuid uuid.UUID, userUuid uuid.UUID, occupiedAt time.Time)
-	SetReleasedAtByScooterUuidAndUserUuid(releasedAt time.Time, scooterUuid uuid.UUID, userUuid uuid.UUID)
+	Create(scooterUuid uuid.UUID, userUuid uuid.UUID)
+	DeleteBy()
 }
 
 type mysqlScooterOccupationRepository struct {
 	db *sql.DB
 }
 
-func (r mysqlScooterOccupationRepository) Create(scooterUuid uuid.UUID, userUuid uuid.UUID, occupiedAt time.Time) {
-	return
+func (r mysqlScooterOccupationRepository) Create(scooterUuid uuid.UUID, userUuid uuid.UUID) {
+	scooterUuidAsBinary, err := scooterUuid.MarshalBinary()
+	if err != nil {
+		panic(err)
+	}
+
+	userUuidAsBinary, err := userUuid.MarshalBinary()
+	if err != nil {
+		panic(err)
+	}
+
+	query := "INSERT INTO scooters_occupations (scooter_id, user_id) VALUES (?, ?)"
+	_, err = r.db.Exec(query, scooterUuidAsBinary, userUuidAsBinary)
+
+	if err != nil {
+		panic(err)
+	}
 }
 
-func (r mysqlScooterOccupationRepository) SetReleasedAtByScooterUuidAndUserUuid(releasedAt time.Time, scooterUuid uuid.UUID, userUuid uuid.UUID) {
+func (r mysqlScooterOccupationRepository) DeleteBy() {
 	return
 }
 

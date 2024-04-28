@@ -3,7 +3,6 @@ package scooter_handler
 import (
 	"github.com/google/uuid"
 	"main/internal/repository"
-	"time"
 )
 
 type OccupyScooterHandler struct {
@@ -11,7 +10,7 @@ type OccupyScooterHandler struct {
 }
 
 func (h OccupyScooterHandler) Handle(scooterUuid uuid.UUID, userUuid uuid.UUID) {
-	h.scooterOccupationRepository.Create(scooterUuid, userUuid, time.Now())
+	h.scooterOccupationRepository.Create(scooterUuid, userUuid)
 }
 
 func NewOccupyScooterHandler(scooterOccupationRepository repository.ScooterOccupationRepository) *OccupyScooterHandler {

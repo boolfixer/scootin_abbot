@@ -2,6 +2,8 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"main/internal/model"
 	"main/internal/scooter_handler"
 	"net/http"
 	"strconv"
@@ -30,7 +32,12 @@ func (c *ScooterController) Search(context *gin.Context) {
 }
 
 func (c *ScooterController) Occupy(context *gin.Context) {
+	scooterId := uuid.MustParse(context.Param("id"))
+	user := context.MustGet("user").(model.User)
 
+	c.occupyScooterHandler.Handle(scooterId, user.Id)
+
+	context.Status(http.StatusCreated)
 }
 
 func (c *ScooterController) Release(context *gin.Context) {

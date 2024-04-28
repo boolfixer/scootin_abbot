@@ -18,16 +18,20 @@ func (s HttpServer) Serve() {
 	}
 }
 
-func NewHttpServer(scooterController *controller.ScooterController) *HttpServer {
+func NewHttpServer(
+	scooterController *controller.ScooterController,
+	authMiddleware *middleware.AuthMiddleware,
+) *HttpServer {
+
 	router := gin.Default()
 
 	public := router.Group("/api/scooters")
 	public.GET("/", scooterController.Search)
 
 	protected := router.Group("/api/scooters")
-	protected.Use(middleware.AuthMiddleware())
-	protected.POST("/occupy", scooterController.Occupy)
-	protected.POST("/release", scooterController.Release)
+	protected.Use(authMiddleware.Authenticate())
+	protected.POST("/:id/occupy", scooterController.Occupy)
+	protected.POST("/:id/release", scooterController.Release)
 
 	return &HttpServer{router: router}
 }
