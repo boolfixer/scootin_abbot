@@ -58,7 +58,7 @@ func (r mysqlScooterOccupationRepository) DeleteByScooterUuidAndUserUuid(scooter
 		panic(err)
 	}
 
-	if deletedRowsCount != 0 {
+	if deletedRowsCount != 1 {
 		panic("No records are affected")
 	}
 }

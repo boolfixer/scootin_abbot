@@ -2,11 +2,13 @@ package repository
 
 import (
 	"database/sql"
+	"github.com/google/uuid"
 	"main/internal/model"
 )
 
 type ScooterRepository interface {
 	FindScootersByArea(latitudeStart int, longitudeStart int, latitudeEnd int, longitudeEnd int) []model.Scooter
+	UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude int, longitude int)
 }
 
 type mysqlScooterRepository struct {
@@ -47,6 +49,31 @@ func (r mysqlScooterRepository) FindScootersByArea(
 	}
 
 	return scooters
+}
+
+func (r mysqlScooterRepository) UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude int, longitude int) {
+	scooterIdAsBinary, err := scooterId.MarshalBinary()
+	if err != nil {
+		panic(err)
+	}
+
+	query := "UPDATE scooters SET scooters.latitude = ?, scooters.longitude = ? WHERE scooters.id = ?"
+
+	result, err := r.db.Exec(query, latitude, longitude, scooterIdAsBinary)
+
+	if err != nil {
+		panic(err)
+	}
+
+	deletedRowsCount, err := result.RowsAffected()
+
+	if err != nil {
+		panic(err)
+	}
+
+	if deletedRowsCount != 1 {
+		panic("No records are affected")
+	}
 }
 
 func NewScooterRepository(db *sql.DB) ScooterRepository {
