@@ -9,6 +9,7 @@ import (
 type ScooterRepository interface {
 	FindScootersByArea(latitudeStart int, longitudeStart int, latitudeEnd int, longitudeEnd int) []model.Scooter
 	UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude int, longitude int)
+	GetByScooterId(scooterId uuid.UUID) model.Scooter
 }
 
 type mysqlScooterRepository struct {
@@ -74,6 +75,24 @@ func (r mysqlScooterRepository) UpdateScooterCoordinatesByScooterId(scooterId uu
 	if deletedRowsCount != 1 {
 		panic("No records are affected")
 	}
+}
+
+func (r mysqlScooterRepository) GetByScooterId(scooterId uuid.UUID) model.Scooter {
+	scooterIdAsBinary, err := scooterId.MarshalBinary()
+	if err != nil {
+		panic(err)
+	}
+
+	query := "SELECT * FROM scooters WHERE scooters.id = ?"
+
+	var scooter model.Scooter
+	err = r.db.QueryRow(query, scooterIdAsBinary).Scan(&scooter.Id, &scooter.Name, &scooter.Latitude, &scooter.Longitude)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return scooter
 }
 
 func NewScooterRepository(db *sql.DB) ScooterRepository {
