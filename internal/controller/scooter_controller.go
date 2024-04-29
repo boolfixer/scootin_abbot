@@ -7,7 +7,6 @@ import (
 	"main/internal/model"
 	"main/internal/scooter_handler"
 	"net/http"
-	"strconv"
 )
 
 type ScooterController struct {
@@ -17,19 +16,14 @@ type ScooterController struct {
 }
 
 func (c *ScooterController) Search(context *gin.Context) {
-	latitude, err := strconv.Atoi(context.Query("latitude"))
+	var userLocation dto.Location
 
-	if err != nil {
-		panic(err)
+	if err := context.BindQuery(&userLocation); err != nil {
+		context.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
-	longitude, err := strconv.Atoi(context.Query("longitude"))
-
-	if err != nil {
-		panic(err)
-	}
-
-	context.JSON(http.StatusOK, c.searchScootersHandler.Handle(latitude, longitude))
+	context.JSON(http.StatusOK, c.searchScootersHandler.Handle(userLocation))
 }
 
 func (c *ScooterController) Occupy(context *gin.Context) {

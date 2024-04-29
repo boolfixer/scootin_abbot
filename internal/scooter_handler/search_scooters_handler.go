@@ -1,6 +1,7 @@
 package scooter_handler
 
 import (
+	"main/internal/dto"
 	"main/internal/model"
 	"main/internal/repository"
 )
@@ -11,12 +12,12 @@ type SearchScootersHandler struct {
 	scooterRepository repository.ScooterRepository
 }
 
-func (h *SearchScootersHandler) Handle(latitude int, longitude int) []model.Scooter {
+func (h *SearchScootersHandler) Handle(userLocation dto.Location) []model.Scooter {
 	// calculate start and end coordinates of search area
-	latitudeStart := latitude - offset
-	longitudeStart := longitude - offset
-	latitudeEnd := latitude + offset
-	longitudeEnd := longitude + offset
+	latitudeStart := userLocation.Latitude - offset
+	longitudeStart := userLocation.Longitude - offset
+	latitudeEnd := userLocation.Latitude + offset
+	longitudeEnd := userLocation.Longitude + offset
 
 	return h.scooterRepository.FindScootersByArea(latitudeStart, longitudeStart, latitudeEnd, longitudeEnd)
 }
