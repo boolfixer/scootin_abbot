@@ -29,7 +29,7 @@ func NewHttpServer(
 	public.GET("/", scooterController.Search)
 
 	protected := router.Group("/api/scooters")
-	protected.Use(authMiddleware.Authenticate())
+	protected.Use(authMiddleware.Handle())
 	protected.POST("/:id/occupy", scooterController.Occupy)
 	protected.POST("/:id/release", scooterController.Release)
 

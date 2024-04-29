@@ -9,7 +9,7 @@ type AuthMiddleware struct {
 	userRepository repository.UserRepository
 }
 
-func (m AuthMiddleware) Authenticate() gin.HandlerFunc {
+func (m AuthMiddleware) Handle() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		apiKey := c.GetHeader("X-API-KEY")
 
