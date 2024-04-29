@@ -21,9 +21,10 @@ func (s HttpServer) Serve() {
 func NewHttpServer(
 	scooterController *controller.ScooterController,
 	authMiddleware *middleware.AuthMiddleware,
+	errorMiddleware middleware.ErrorMiddleware,
 ) *HttpServer {
-
 	router := gin.Default()
+	router.Use(errorMiddleware.Handle())
 
 	public := router.Group("/api/scooters")
 	public.GET("/", scooterController.Search)

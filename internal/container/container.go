@@ -14,6 +14,7 @@ var constructors = []interface{}{
 	controller.NewScooterController,
 	database.NewDBConnection,
 	middleware.NewAuthMiddleware,
+	middleware.NewErrorMiddleware,
 	repository.NewScooterRepository,
 	repository.NewScooterOccupationRepository,
 	repository.NewUserRepository,

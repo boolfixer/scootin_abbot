@@ -19,7 +19,6 @@ func (c *ScooterController) Search(context *gin.Context) {
 	var userLocation dto.Location
 
 	if err := context.BindQuery(&userLocation); err != nil {
-		context.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -42,7 +41,6 @@ func (c *ScooterController) Release(context *gin.Context) {
 	var scooterLocation dto.Location
 
 	if err := context.BindJSON(&scooterLocation); err != nil {
-		context.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
