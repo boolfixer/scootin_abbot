@@ -9,6 +9,6 @@ func TestUnauthorizedErrorError(t *testing.T) {
 	got := unauthorizedError.Error()
 
 	if want != got {
-		t.Errorf("got %s posts, wanted %s posts", got, want)
+		t.Errorf("got %q, wanted %q", got, want)
 	}
 }

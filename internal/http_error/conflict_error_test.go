@@ -7,6 +7,6 @@ func TestConflictError(t *testing.T) {
 	conflictError := ConflictError{Message: message}
 
 	if message != conflictError.Error() {
-		t.Errorf("got %s posts, wanted %s posts", conflictError.Error(), message)
+		t.Errorf("got %q, wanted %q", conflictError.Error(), message)
 	}
 }
