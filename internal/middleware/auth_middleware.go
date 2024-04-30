@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"main/internal/repository"
+	"net/http"
 )
 
 type AuthMiddleware struct {
@@ -14,10 +15,15 @@ func (m AuthMiddleware) Handle() gin.HandlerFunc {
 		apiKey := c.GetHeader("X-API-KEY")
 
 		if apiKey == "" {
-			panic("Authentication failed")
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
 		}
 
-		user := m.userRepository.GetByApiKey(apiKey)
+		user, exists := m.userRepository.GetByApiKey(apiKey)
+		if !exists {
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
 
 		c.Set("user", user)
 		c.Next()
