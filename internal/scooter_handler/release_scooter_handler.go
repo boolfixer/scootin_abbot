@@ -13,6 +13,11 @@ type ReleaseScooterHandler struct {
 }
 
 func (h ReleaseScooterHandler) Handle(scooterUuid uuid.UUID, userUuid uuid.UUID, scooterLocation dto.Location) error {
+	deleted := h.scooterOccupationRepository.DeleteByScooterUuidAndUserUuid(scooterUuid, userUuid)
+	if !deleted {
+		return http_error.NotFoundError{ModelName: "Scooter occupation"}
+	}
+
 	updated := h.scooterRepository.UpdateScooterCoordinatesByScooterId(
 		scooterUuid,
 		scooterLocation.Latitude,
@@ -21,11 +26,6 @@ func (h ReleaseScooterHandler) Handle(scooterUuid uuid.UUID, userUuid uuid.UUID,
 
 	if !updated {
 		return http_error.NotFoundError{ModelName: "Scooter"}
-	}
-
-	deleted := h.scooterOccupationRepository.DeleteByScooterUuidAndUserUuid(scooterUuid, userUuid)
-	if !deleted {
-		return http_error.NotFoundError{ModelName: "Scooter occupation"}
 	}
 
 	return nil
