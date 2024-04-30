@@ -17,7 +17,6 @@ type ScooterController struct {
 
 func (c *ScooterController) Search(context *gin.Context) {
 	var userLocation dto.Location
-
 	if err := context.BindQuery(&userLocation); err != nil {
 		return
 	}
@@ -29,7 +28,10 @@ func (c *ScooterController) Occupy(context *gin.Context) {
 	scooterId := uuid.MustParse(context.Param("id"))
 	user := context.MustGet("user").(model.User)
 
-	c.occupyScooterHandler.Handle(scooterId, user.Id)
+	if err := c.occupyScooterHandler.Handle(scooterId, user.Id); err != nil {
+		context.Error(err)
+		return
+	}
 
 	context.Status(http.StatusCreated)
 }
@@ -39,12 +41,16 @@ func (c *ScooterController) Release(context *gin.Context) {
 	user := context.MustGet("user").(model.User)
 
 	var scooterLocation dto.Location
-
 	if err := context.BindJSON(&scooterLocation); err != nil {
 		return
 	}
 
-	c.releaseScooterHandler.Handle(scooterId, user.Id, scooterLocation)
+	if err := c.releaseScooterHandler.Handle(scooterId, user.Id, scooterLocation); err != nil {
+		context.Error(err)
+		return
+	}
+
+	context.Status(http.StatusNoContent)
 }
 
 func NewScooterController(

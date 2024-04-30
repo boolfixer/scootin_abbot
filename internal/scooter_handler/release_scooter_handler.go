@@ -3,6 +3,7 @@ package scooter_handler
 import (
 	"github.com/google/uuid"
 	"main/internal/dto"
+	"main/internal/http_error"
 	"main/internal/repository"
 )
 
@@ -11,9 +12,23 @@ type ReleaseScooterHandler struct {
 	scooterRepository           repository.ScooterRepository
 }
 
-func (h ReleaseScooterHandler) Handle(scooterUuid uuid.UUID, userUuid uuid.UUID, scooterLocation dto.Location) {
-	h.scooterOccupationRepository.DeleteByScooterUuidAndUserUuid(scooterUuid, userUuid)
-	h.scooterRepository.UpdateScooterCoordinatesByScooterId(scooterUuid, scooterLocation.Latitude, scooterLocation.Longitude)
+func (h ReleaseScooterHandler) Handle(scooterUuid uuid.UUID, userUuid uuid.UUID, scooterLocation dto.Location) error {
+	updated := h.scooterRepository.UpdateScooterCoordinatesByScooterId(
+		scooterUuid,
+		scooterLocation.Latitude,
+		scooterLocation.Longitude,
+	)
+
+	if !updated {
+		return http_error.NotFoundError{ModelName: "Scooter"}
+	}
+
+	deleted := h.scooterOccupationRepository.DeleteByScooterUuidAndUserUuid(scooterUuid, userUuid)
+	if !deleted {
+		return http_error.NotFoundError{ModelName: "Scooter occupation"}
+	}
+
+	return nil
 }
 
 func NewReleaseScooterHandler(

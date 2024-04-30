@@ -6,61 +6,46 @@ import (
 )
 
 type ScooterOccupationRepository interface {
-	Create(scooterUuid uuid.UUID, userUuid uuid.UUID)
-	DeleteByScooterUuidAndUserUuid(scooterUuid uuid.UUID, userUuid uuid.UUID)
+	Create(scooterUuid uuid.UUID, userUuid uuid.UUID) (created bool)
+	DeleteByScooterUuidAndUserUuid(scooterUuid uuid.UUID, userUuid uuid.UUID) (recordDeleted bool)
 }
 
 type mysqlScooterOccupationRepository struct {
 	db *sql.DB
 }
 
-func (r mysqlScooterOccupationRepository) Create(scooterUuid uuid.UUID, userUuid uuid.UUID) {
-	scooterUuidAsBinary, err := scooterUuid.MarshalBinary()
-	if err != nil {
-		panic(err)
-	}
-
-	userUuidAsBinary, err := userUuid.MarshalBinary()
-	if err != nil {
-		panic(err)
-	}
+func (r mysqlScooterOccupationRepository) Create(scooterUuid uuid.UUID, userUuid uuid.UUID) (created bool) {
+	scooterUuidAsBinary, _ := scooterUuid.MarshalBinary()
+	userUuidAsBinary, _ := userUuid.MarshalBinary()
 
 	query := "INSERT INTO scooters_occupations (scooter_id, user_id) VALUES (?, ?)"
-	_, err = r.db.Exec(query, scooterUuidAsBinary, userUuidAsBinary)
+	_, err := r.db.Exec(query, scooterUuidAsBinary, userUuidAsBinary)
 
 	if err != nil {
-		panic(err)
+		return false
 	}
+
+	return true
 }
 
-func (r mysqlScooterOccupationRepository) DeleteByScooterUuidAndUserUuid(scooterUuid uuid.UUID, userUuid uuid.UUID) {
-	scooterUuidAsBinary, err := scooterUuid.MarshalBinary()
-	if err != nil {
-		panic(err)
-	}
+func (r mysqlScooterOccupationRepository) DeleteByScooterUuidAndUserUuid(
+	scooterUuid uuid.UUID,
+	userUuid uuid.UUID,
+) (recordDeleted bool) {
 
-	userUuidAsBinary, err := userUuid.MarshalBinary()
-	if err != nil {
-		panic(err)
-	}
+	scooterUuidAsBinary, _ := scooterUuid.MarshalBinary()
+	userUuidAsBinary, _ := userUuid.MarshalBinary()
 
 	query := "DELETE FROM scooters_occupations WHERE scooter_id = ? AND user_id = ?"
-
 	result, err := r.db.Exec(query, scooterUuidAsBinary, userUuidAsBinary)
 
 	if err != nil {
 		panic(err)
 	}
 
-	deletedRowsCount, err := result.RowsAffected()
+	deletedRowsCount, _ := result.RowsAffected()
 
-	if err != nil {
-		panic(err)
-	}
-
-	if deletedRowsCount != 1 {
-		panic("No records are affected")
-	}
+	return deletedRowsCount == 1
 }
 
 func NewScooterOccupationRepository(db *sql.DB) ScooterOccupationRepository {

@@ -8,8 +8,8 @@ import (
 
 type ScooterRepository interface {
 	FindScootersByArea(latitudeStart int, longitudeStart int, latitudeEnd int, longitudeEnd int) []model.Scooter
-	UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude int, longitude int)
-	GetByScooterId(scooterId uuid.UUID) model.Scooter
+	UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude int, longitude int) (updated bool)
+	GetByScooterId(scooterId uuid.UUID) (model.Scooter, bool)
 }
 
 type mysqlScooterRepository struct {
@@ -52,32 +52,24 @@ func (r mysqlScooterRepository) FindScootersByArea(
 	return scooters
 }
 
-func (r mysqlScooterRepository) UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude int, longitude int) {
-	scooterIdAsBinary, err := scooterId.MarshalBinary()
-	if err != nil {
-		panic(err)
-	}
+func (r mysqlScooterRepository) UpdateScooterCoordinatesByScooterId(
+	scooterId uuid.UUID,
+	latitude int,
+	longitude int,
+) (updated bool) {
+	scooterIdAsBinary, _ := scooterId.MarshalBinary()
 
 	query := "UPDATE scooters SET scooters.latitude = ?, scooters.longitude = ? WHERE scooters.id = ?"
-
-	result, err := r.db.Exec(query, latitude, longitude, scooterIdAsBinary)
-
-	if err != nil {
-		panic(err)
-	}
-
-	deletedRowsCount, err := result.RowsAffected()
+	_, err := r.db.Exec(query, latitude, longitude, scooterIdAsBinary)
 
 	if err != nil {
 		panic(err)
 	}
 
-	if deletedRowsCount != 1 {
-		panic("No records are affected")
-	}
+	return true
 }
 
-func (r mysqlScooterRepository) GetByScooterId(scooterId uuid.UUID) model.Scooter {
+func (r mysqlScooterRepository) GetByScooterId(scooterId uuid.UUID) (model.Scooter, bool) {
 	scooterIdAsBinary, err := scooterId.MarshalBinary()
 	if err != nil {
 		panic(err)
@@ -89,10 +81,10 @@ func (r mysqlScooterRepository) GetByScooterId(scooterId uuid.UUID) model.Scoote
 	err = r.db.QueryRow(query, scooterIdAsBinary).Scan(&scooter.Id, &scooter.Name, &scooter.Latitude, &scooter.Longitude)
 
 	if err != nil {
-		panic(err)
+		return scooter, false
 	}
 
-	return scooter
+	return scooter, true
 }
 
 func NewScooterRepository(db *sql.DB) ScooterRepository {
