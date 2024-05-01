@@ -26,7 +26,7 @@ func TestSearchScootersHandler(t *testing.T) {
 		FindScootersByArea(latitudeStart, longitudeStart, latitudeEnd, longitudeEnd).
 		Return([]model.Scooter{scooter})
 
-	handler := SearchScootersHandler{scooterRepository: scooterRepository}
+	handler := NewSearchScootersHandler(scooterRepository)
 	scooters := handler.Handle(location)
 
 	if len(scooters) != 1 {

@@ -33,8 +33,8 @@ func (h ReleaseScooterHandler) Handle(scooterUuid uuid.UUID, userUuid uuid.UUID,
 
 func NewReleaseScooterHandler(
 	scooterOccupationRepository repository.ScooterOccupationRepository,
-	scooterRepository repository.ScooterRepository) *ReleaseScooterHandler {
-
+	scooterRepository repository.ScooterRepository,
+) *ReleaseScooterHandler {
 	return &ReleaseScooterHandler{
 		scooterOccupationRepository: scooterOccupationRepository,
 		scooterRepository:           scooterRepository,
