@@ -41,9 +41,37 @@ func TestOccupyScooterHandler(t *testing.T) {
 	})
 
 	t.Run("failed to create scooter", func(t *testing.T) {
-		var scooter model.Scooter
 		scooterId := uuid.UUID{}
 		userId := uuid.UUID{}
+		scooter := model.Scooter{Id: scooterId, IsOccupied: true}
+
+		scooterOccupationRepository := mock_repository.NewMockScooterOccupationRepository(gomock.NewController(t))
+		scooterRepository := mock_repository.NewMockScooterRepository(gomock.NewController(t))
+		scooterRepository.
+			EXPECT().
+			GetByScooterId(scooterId).
+			Return(scooter, true)
+
+		handler := NewOccupyScooterHandler(scooterOccupationRepository, scooterRepository)
+		err := handler.Handle(scooterId, userId)
+
+		want := reflect.TypeOf(http_error.ConflictError{}).Name()
+		got := reflect.TypeOf(err).Name()
+		if want != got {
+			t.Errorf("failed to assert error; got %q, wanted %q", got, want)
+		}
+
+		want = "Scooter has been already occupied."
+		got = err.Error()
+		if want != got {
+			t.Errorf("failed to assert error message; got %q, wanted %q", got, want)
+		}
+	})
+
+	t.Run("failed to occupy scooter", func(t *testing.T) {
+		scooterId := uuid.UUID{}
+		userId := uuid.UUID{}
+		scooter := model.Scooter{Id: scooterId, IsOccupied: false}
 
 		scooterRepository := mock_repository.NewMockScooterRepository(gomock.NewController(t))
 		scooterRepository.

@@ -23,8 +23,9 @@ func (r mysqlScooterRepository) FindScootersByArea(
 	longitudeEnd int,
 ) []model.Scooter {
 
-	query := "SELECT * " +
+	query := "SELECT scooters.id, scooters.name, scooters.latitude, scooters.longitude, scooters_occupations.id IS NOT NULL " +
 		"FROM scooters " +
+		"LEFT JOIN scooters_occupations ON scooters_occupations.scooter_id = scooters.id " +
 		"WHERE scooters.latitude >= ? " +
 		"AND scooters.longitude >= ? " +
 		"AND scooters.latitude <= ? " +
@@ -40,7 +41,7 @@ func (r mysqlScooterRepository) FindScootersByArea(
 
 	for rows.Next() {
 		var scooter = model.Scooter{}
-		err := rows.Scan(&scooter.Id, &scooter.Name, &scooter.Latitude, &scooter.Longitude)
+		err := rows.Scan(&scooter.Id, &scooter.Name, &scooter.Latitude, &scooter.Longitude, &scooter.IsOccupied)
 
 		if err != nil {
 			panic(err)
@@ -75,10 +76,13 @@ func (r mysqlScooterRepository) GetByScooterId(scooterId uuid.UUID) (model.Scoot
 		panic(err)
 	}
 
-	query := "SELECT * FROM scooters WHERE scooters.id = ?"
+	query := "SELECT scooters.id, scooters.name, scooters.latitude, scooters.longitude, scooters_occupations.id IS NOT NULL " +
+		"FROM scooters " +
+		"LEFT JOIN scooters_occupations ON scooters_occupations.scooter_id = scooters.id " +
+		"WHERE scooters.id = ?"
 
 	var scooter model.Scooter
-	err = r.db.QueryRow(query, scooterIdAsBinary).Scan(&scooter.Id, &scooter.Name, &scooter.Latitude, &scooter.Longitude)
+	err = r.db.QueryRow(query, scooterIdAsBinary).Scan(&scooter.Id, &scooter.Name, &scooter.Latitude, &scooter.Longitude, &scooter.IsOccupied)
 
 	if err != nil {
 		return scooter, false

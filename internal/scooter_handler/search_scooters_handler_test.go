@@ -17,7 +17,7 @@ func TestSearchScootersHandler(t *testing.T) {
 	latitudeEnd := 18
 	longitudeEnd := 16
 
-	scooter := model.Scooter{Id: uuid.UUID{}, Name: "Test scooter", Latitude: 14, Longitude: 16}
+	scooter := model.Scooter{Id: uuid.UUID{}, Name: "Test scooter", Latitude: 14, Longitude: 16, IsOccupied: false}
 
 	ctrl := gomock.NewController(t)
 	scooterRepository := mock_repository.NewMockScooterRepository(ctrl)
