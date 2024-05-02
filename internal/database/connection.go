@@ -15,6 +15,7 @@ func NewDBConnection() *sql.DB {
 		Net:    "tcp",
 		Addr:   "127.0.0.1:33306",
 		DBName: "scootin_aboot",
+		Params: map[string]string{"parseTime": "true"},
 	}
 	db, err := sql.Open("mysql", cfg.FormatDSN())
 
