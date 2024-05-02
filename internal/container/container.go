@@ -21,6 +21,7 @@ var constructors = []interface{}{
 	scooter_handler.NewSearchScootersHandler,
 	scooter_handler.NewOccupyScooterHandler,
 	scooter_handler.NewReleaseScooterHandler,
+	scooter_handler.NewUpdateScooterLocation,
 	http_server.NewHttpServer,
 }
 
