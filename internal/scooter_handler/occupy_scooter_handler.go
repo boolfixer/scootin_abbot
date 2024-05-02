@@ -11,14 +11,14 @@ type OccupyScooterHandler struct {
 	scooterRepository           repository.ScooterRepository
 }
 
-func (h OccupyScooterHandler) Handle(scooterUuid uuid.UUID, userUuid uuid.UUID) error {
-	scooter, exists := h.scooterRepository.GetByScooterId(scooterUuid)
+func (h OccupyScooterHandler) Handle(scooterId uuid.UUID, userId uuid.UUID) error {
+	scooter, exists := h.scooterRepository.GetByScooterId(scooterId)
 
 	if !exists {
 		return http_error.NotFoundError{ModelName: "Scooter"}
 	}
 
-	if scooter.IsOccupied || !h.scooterOccupationRepository.Create(scooterUuid, userUuid) {
+	if scooter.IsOccupied || !h.scooterOccupationRepository.Create(scooterId, userId) {
 		return http_error.ConflictError{Message: "Scooter has been already occupied."}
 	}
 

@@ -36,44 +36,44 @@ func (m *MockScooterOccupationRepository) EXPECT() *MockScooterOccupationReposit
 }
 
 // Create mocks base method.
-func (m *MockScooterOccupationRepository) Create(scooterUuid, userUuid uuid.UUID) bool {
+func (m *MockScooterOccupationRepository) Create(scooterId, userId uuid.UUID) bool {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", scooterUuid, userUuid)
+	ret := m.ctrl.Call(m, "Create", scooterId, userId)
 	ret0, _ := ret[0].(bool)
 	return ret0
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockScooterOccupationRepositoryMockRecorder) Create(scooterUuid, userUuid interface{}) *gomock.Call {
+func (mr *MockScooterOccupationRepositoryMockRecorder) Create(scooterId, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockScooterOccupationRepository)(nil).Create), scooterUuid, userUuid)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockScooterOccupationRepository)(nil).Create), scooterId, userId)
 }
 
-// DeleteByScooterUuidAndUserUuid mocks base method.
-func (m *MockScooterOccupationRepository) DeleteByScooterUuidAndUserUuid(scooterUuid, userUuid uuid.UUID) bool {
+// DeleteByScooterIdAndUserId mocks base method.
+func (m *MockScooterOccupationRepository) DeleteByScooterIdAndUserId(scooterId, userId uuid.UUID) bool {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteByScooterUuidAndUserUuid", scooterUuid, userUuid)
+	ret := m.ctrl.Call(m, "DeleteByScooterIdAndUserId", scooterId, userId)
 	ret0, _ := ret[0].(bool)
 	return ret0
 }
 
-// DeleteByScooterUuidAndUserUuid indicates an expected call of DeleteByScooterUuidAndUserUuid.
-func (mr *MockScooterOccupationRepositoryMockRecorder) DeleteByScooterUuidAndUserUuid(scooterUuid, userUuid interface{}) *gomock.Call {
+// DeleteByScooterIdAndUserId indicates an expected call of DeleteByScooterIdAndUserId.
+func (mr *MockScooterOccupationRepositoryMockRecorder) DeleteByScooterIdAndUserId(scooterId, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteByScooterUuidAndUserUuid", reflect.TypeOf((*MockScooterOccupationRepository)(nil).DeleteByScooterUuidAndUserUuid), scooterUuid, userUuid)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteByScooterIdAndUserId", reflect.TypeOf((*MockScooterOccupationRepository)(nil).DeleteByScooterIdAndUserId), scooterId, userId)
 }
 
 // GetByScooterIdAndUserId mocks base method.
-func (m *MockScooterOccupationRepository) GetByScooterIdAndUserId(scooterUuid, userUuid uuid.UUID) (model.ScooterOccupation, bool) {
+func (m *MockScooterOccupationRepository) GetByScooterIdAndUserId(scooterId, userId uuid.UUID) (model.ScooterOccupation, bool) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetByScooterIdAndUserId", scooterUuid, userUuid)
+	ret := m.ctrl.Call(m, "GetByScooterIdAndUserId", scooterId, userId)
 	ret0, _ := ret[0].(model.ScooterOccupation)
 	ret1, _ := ret[1].(bool)
 	return ret0, ret1
 }
 
 // GetByScooterIdAndUserId indicates an expected call of GetByScooterIdAndUserId.
-func (mr *MockScooterOccupationRepositoryMockRecorder) GetByScooterIdAndUserId(scooterUuid, userUuid interface{}) *gomock.Call {
+func (mr *MockScooterOccupationRepositoryMockRecorder) GetByScooterIdAndUserId(scooterId, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByScooterIdAndUserId", reflect.TypeOf((*MockScooterOccupationRepository)(nil).GetByScooterIdAndUserId), scooterUuid, userUuid)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByScooterIdAndUserId", reflect.TypeOf((*MockScooterOccupationRepository)(nil).GetByScooterIdAndUserId), scooterId, userId)
 }

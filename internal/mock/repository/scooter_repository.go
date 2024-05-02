@@ -7,6 +7,7 @@ package mock_repository
 import (
 	model "main/internal/model"
 	reflect "reflect"
+	time "time"
 
 	gomock "github.com/golang/mock/gomock"
 	uuid "github.com/google/uuid"
@@ -65,15 +66,15 @@ func (mr *MockScooterRepositoryMockRecorder) GetByScooterId(scooterId interface{
 }
 
 // UpdateScooterCoordinatesByScooterId mocks base method.
-func (m *MockScooterRepository) UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude, longitude int) error {
+func (m *MockScooterRepository) UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude, longitude int, time time.Time) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateScooterCoordinatesByScooterId", scooterId, latitude, longitude)
+	ret := m.ctrl.Call(m, "UpdateScooterCoordinatesByScooterId", scooterId, latitude, longitude, time)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UpdateScooterCoordinatesByScooterId indicates an expected call of UpdateScooterCoordinatesByScooterId.
-func (mr *MockScooterRepositoryMockRecorder) UpdateScooterCoordinatesByScooterId(scooterId, latitude, longitude interface{}) *gomock.Call {
+func (mr *MockScooterRepositoryMockRecorder) UpdateScooterCoordinatesByScooterId(scooterId, latitude, longitude, time interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateScooterCoordinatesByScooterId", reflect.TypeOf((*MockScooterRepository)(nil).UpdateScooterCoordinatesByScooterId), scooterId, latitude, longitude)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateScooterCoordinatesByScooterId", reflect.TypeOf((*MockScooterRepository)(nil).UpdateScooterCoordinatesByScooterId), scooterId, latitude, longitude, time)
 }

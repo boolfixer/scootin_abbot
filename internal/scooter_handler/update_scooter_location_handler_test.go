@@ -135,7 +135,12 @@ func TestUpdateScooterLocation(t *testing.T) {
 			Return(scooter, true)
 		scooterRepository.
 			EXPECT().
-			UpdateScooterCoordinatesByScooterId(scooterId, scooterLocationUpdate.Latitude, scooterLocationUpdate.Longitude).
+			UpdateScooterCoordinatesByScooterId(
+				scooterId,
+				scooterLocationUpdate.Latitude,
+				scooterLocationUpdate.Longitude,
+				scooterLocationUpdate.Time,
+			).
 			Return(errors.New("test error"))
 
 		handler := NewUpdateScooterLocation(scooterOccupationRepository, scooterRepository)
@@ -175,7 +180,12 @@ func TestUpdateScooterLocation(t *testing.T) {
 			Return(scooter, true)
 		scooterRepository.
 			EXPECT().
-			UpdateScooterCoordinatesByScooterId(scooterId, scooterLocationUpdate.Latitude, scooterLocationUpdate.Longitude).
+			UpdateScooterCoordinatesByScooterId(
+				scooterId,
+				scooterLocationUpdate.Latitude,
+				scooterLocationUpdate.Longitude,
+				scooterLocationUpdate.Time,
+			).
 			Return(nil)
 
 		handler := NewUpdateScooterLocation(scooterOccupationRepository, scooterRepository)

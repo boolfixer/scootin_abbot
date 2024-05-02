@@ -15,7 +15,7 @@ func TestReleaseScooterHandler(t *testing.T) {
 		userId := uuid.UUID{}
 
 		scooterOccupationRepository := mock_repository.NewMockScooterOccupationRepository(gomock.NewController(t))
-		scooterOccupationRepository.EXPECT().DeleteByScooterUuidAndUserUuid(scooterId, userId).Return(false)
+		scooterOccupationRepository.EXPECT().DeleteByScooterIdAndUserId(scooterId, userId).Return(false)
 
 		handler := NewReleaseScooterHandler(scooterOccupationRepository)
 		err := handler.Handle(scooterId, userId)
@@ -38,7 +38,7 @@ func TestReleaseScooterHandler(t *testing.T) {
 		userId := uuid.UUID{}
 
 		scooterOccupationRepository := mock_repository.NewMockScooterOccupationRepository(gomock.NewController(t))
-		scooterOccupationRepository.EXPECT().DeleteByScooterUuidAndUserUuid(scooterId, userId).Return(true)
+		scooterOccupationRepository.EXPECT().DeleteByScooterIdAndUserId(scooterId, userId).Return(true)
 
 		handler := NewReleaseScooterHandler(scooterOccupationRepository)
 		err := handler.Handle(scooterId, userId)

@@ -10,8 +10,8 @@ type ReleaseScooterHandler struct {
 	scooterOccupationRepository repository.ScooterOccupationRepository
 }
 
-func (h ReleaseScooterHandler) Handle(scooterUuid uuid.UUID, userUuid uuid.UUID) error {
-	deleted := h.scooterOccupationRepository.DeleteByScooterUuidAndUserUuid(scooterUuid, userUuid)
+func (h ReleaseScooterHandler) Handle(scooterId uuid.UUID, userId uuid.UUID) error {
+	deleted := h.scooterOccupationRepository.DeleteByScooterIdAndUserId(scooterId, userId)
 
 	if !deleted {
 		return http_error.NotFoundError{ModelName: "Scooter occupation"}

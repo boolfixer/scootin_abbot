@@ -13,17 +13,17 @@ type UpdateScooterLocationHandler struct {
 }
 
 func (h UpdateScooterLocationHandler) Handle(
-	scooterUuid uuid.UUID,
-	userUuid uuid.UUID,
+	scooterId uuid.UUID,
+	userId uuid.UUID,
 	scooterLocationUpdate dto.ScooterLocationUpdate,
 ) error {
-	_, exists := h.scooterOccupationRepository.GetByScooterIdAndUserId(scooterUuid, userUuid)
+	_, exists := h.scooterOccupationRepository.GetByScooterIdAndUserId(scooterId, userId)
 
 	if !exists {
 		return http_error.ConflictError{Message: "Scooter is not occupied by current user."}
 	}
 
-	scooter, exists := h.scooterRepository.GetByScooterId(scooterUuid)
+	scooter, exists := h.scooterRepository.GetByScooterId(scooterId)
 
 	if !exists {
 		return http_error.NotFoundError{ModelName: "Scooter"}
@@ -34,7 +34,7 @@ func (h UpdateScooterLocationHandler) Handle(
 	}
 
 	err := h.scooterRepository.UpdateScooterCoordinatesByScooterId(
-		scooterUuid,
+		scooterId,
 		scooterLocationUpdate.Latitude,
 		scooterLocationUpdate.Longitude,
 		scooterLocationUpdate.Time,

@@ -7,21 +7,21 @@ import (
 )
 
 type ScooterOccupationRepository interface {
-	Create(scooterUuid uuid.UUID, userUuid uuid.UUID) (created bool)
-	DeleteByScooterUuidAndUserUuid(scooterUuid uuid.UUID, userUuid uuid.UUID) (recordDeleted bool)
-	GetByScooterIdAndUserId(scooterUuid uuid.UUID, userUuid uuid.UUID) (model.ScooterOccupation, bool)
+	Create(scooterId uuid.UUID, userId uuid.UUID) (created bool)
+	DeleteByScooterIdAndUserId(scooterId uuid.UUID, userId uuid.UUID) (recordDeleted bool)
+	GetByScooterIdAndUserId(scooterId uuid.UUID, userId uuid.UUID) (model.ScooterOccupation, bool)
 }
 
 type mysqlScooterOccupationRepository struct {
 	db *sql.DB
 }
 
-func (r mysqlScooterOccupationRepository) Create(scooterUuid uuid.UUID, userUuid uuid.UUID) (created bool) {
-	scooterUuidAsBinary, _ := scooterUuid.MarshalBinary()
-	userUuidAsBinary, _ := userUuid.MarshalBinary()
+func (r mysqlScooterOccupationRepository) Create(scooterId uuid.UUID, userId uuid.UUID) (created bool) {
+	scooterIdAsBinary, _ := scooterId.MarshalBinary()
+	userIdAsBinary, _ := userId.MarshalBinary()
 
 	query := "INSERT INTO scooters_occupations (scooter_id, user_id) VALUES (?, ?)"
-	_, err := r.db.Exec(query, scooterUuidAsBinary, userUuidAsBinary)
+	_, err := r.db.Exec(query, scooterIdAsBinary, userIdAsBinary)
 
 	if err != nil {
 		return false
@@ -30,16 +30,16 @@ func (r mysqlScooterOccupationRepository) Create(scooterUuid uuid.UUID, userUuid
 	return true
 }
 
-func (r mysqlScooterOccupationRepository) DeleteByScooterUuidAndUserUuid(
-	scooterUuid uuid.UUID,
-	userUuid uuid.UUID,
+func (r mysqlScooterOccupationRepository) DeleteByScooterIdAndUserId(
+	scooterId uuid.UUID,
+	userId uuid.UUID,
 ) (recordDeleted bool) {
 
-	scooterUuidAsBinary, _ := scooterUuid.MarshalBinary()
-	userUuidAsBinary, _ := userUuid.MarshalBinary()
+	scooterIdAsBinary, _ := scooterId.MarshalBinary()
+	userIdAsBinary, _ := userId.MarshalBinary()
 
 	query := "DELETE FROM scooters_occupations WHERE scooter_id = ? AND user_id = ?"
-	result, err := r.db.Exec(query, scooterUuidAsBinary, userUuidAsBinary)
+	result, err := r.db.Exec(query, scooterIdAsBinary, userIdAsBinary)
 
 	if err != nil {
 		panic(err)
@@ -51,16 +51,16 @@ func (r mysqlScooterOccupationRepository) DeleteByScooterUuidAndUserUuid(
 }
 
 func (r mysqlScooterOccupationRepository) GetByScooterIdAndUserId(
-	scooterUuid uuid.UUID,
-	userUuid uuid.UUID,
+	scooterId uuid.UUID,
+	userId uuid.UUID,
 ) (model.ScooterOccupation, bool) {
-	scooterUuidAsBinary, _ := scooterUuid.MarshalBinary()
-	userUuidAsBinary, _ := userUuid.MarshalBinary()
+	scooterIdAsBinary, _ := scooterId.MarshalBinary()
+	userIdAsBinary, _ := userId.MarshalBinary()
 
 	query := "SELECT * FROM scooters_occupations WHERE scooter_id = ? AND user_id = ?"
 
 	var scooterOccupation model.ScooterOccupation
-	err := r.db.QueryRow(query, scooterUuidAsBinary, userUuidAsBinary).Scan(
+	err := r.db.QueryRow(query, scooterIdAsBinary, userIdAsBinary).Scan(
 		&scooterOccupation.Id,
 		&scooterOccupation.ScooterId,
 		&scooterOccupation.UserId,
