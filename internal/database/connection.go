@@ -2,19 +2,18 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/go-sql-driver/mysql"
+	"os"
 )
 
 func NewDBConnection() *sql.DB {
-	// @todo: fetch config from env file
 	cfg := mysql.Config{
-		//User:   os.Getenv("DBUSER"),
-		User: "root",
-		//Passwd: os.Getenv("DBPASS"),
-		Passwd: "root",
+		User:   os.Getenv("DATABASE_USER"),
+		Passwd: os.Getenv("DATABASE_PASSWORD"),
 		Net:    "tcp",
-		Addr:   "127.0.0.1:33306",
-		DBName: "scootin_aboot",
+		Addr:   fmt.Sprintf("%s:%s", os.Getenv("DATABASE_ADDRESS"), os.Getenv("DATABASE_PORT")),
+		DBName: os.Getenv("DATABASE_NAME"),
 		Params: map[string]string{"parseTime": "true"},
 	}
 	db, err := sql.Open("mysql", cfg.FormatDSN())

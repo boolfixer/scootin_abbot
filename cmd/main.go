@@ -1,14 +1,17 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
 	"main/internal/container"
 	"main/internal/http_server"
 	"main/internal/simulator"
+	"os"
 )
 
 func main() {
-	c := container.Bootstrap()
+	loadEnvVars()
 
+	c := container.Bootstrap()
 	err := c.Invoke(run)
 
 	if err != nil {
@@ -23,12 +26,20 @@ func run(s *http_server.HttpServer) {
 
 func simulateClients() {
 	clients := []simulator.ClientSimulator{
-		simulator.NewClientSimulator("yLxCMVd*p9hZNnvYfGx$yQezPBE3@8Lp9sgKhE9QwtQMM!v6y%4$Q&UuqJjC"),
-		simulator.NewClientSimulator("rcYPJRUGf3xv&w4ny%Qhs1^&LJN@&T@H8$3srvheyYP&XJXs^S@sU1QFQ$Hv"),
-		simulator.NewClientSimulator("3JFj84#XE4^18jfbhT2vfB#u3Ev4DrsQ*xrXJg7N5dWEgTh2XmTEx%EQ4D8U"),
+		simulator.NewClientSimulator(os.Getenv("USER_API_KEY_1")),
+		simulator.NewClientSimulator(os.Getenv("USER_API_KEY_2")),
+		simulator.NewClientSimulator(os.Getenv("USER_API_KEY_3")),
 	}
 
 	for _, client := range clients {
 		go client.Run()
+	}
+}
+
+func loadEnvVars() {
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		panic("Error loading .env file: %s")
 	}
 }
