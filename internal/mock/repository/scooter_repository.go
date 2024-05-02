@@ -65,10 +65,10 @@ func (mr *MockScooterRepositoryMockRecorder) GetByScooterId(scooterId interface{
 }
 
 // UpdateScooterCoordinatesByScooterId mocks base method.
-func (m *MockScooterRepository) UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude, longitude int) bool {
+func (m *MockScooterRepository) UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude, longitude int) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateScooterCoordinatesByScooterId", scooterId, latitude, longitude)
-	ret0, _ := ret[0].(bool)
+	ret0, _ := ret[0].(error)
 	return ret0
 }
 

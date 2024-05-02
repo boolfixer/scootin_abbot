@@ -5,6 +5,7 @@
 package mock_repository
 
 import (
+	model "main/internal/model"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -60,4 +61,19 @@ func (m *MockScooterOccupationRepository) DeleteByScooterUuidAndUserUuid(scooter
 func (mr *MockScooterOccupationRepositoryMockRecorder) DeleteByScooterUuidAndUserUuid(scooterUuid, userUuid interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteByScooterUuidAndUserUuid", reflect.TypeOf((*MockScooterOccupationRepository)(nil).DeleteByScooterUuidAndUserUuid), scooterUuid, userUuid)
+}
+
+// GetByScooterIdAndUserId mocks base method.
+func (m *MockScooterOccupationRepository) GetByScooterIdAndUserId(scooterUuid, userUuid uuid.UUID) (model.ScooterOccupation, bool) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByScooterIdAndUserId", scooterUuid, userUuid)
+	ret0, _ := ret[0].(model.ScooterOccupation)
+	ret1, _ := ret[1].(bool)
+	return ret0, ret1
+}
+
+// GetByScooterIdAndUserId indicates an expected call of GetByScooterIdAndUserId.
+func (mr *MockScooterOccupationRepositoryMockRecorder) GetByScooterIdAndUserId(scooterUuid, userUuid interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByScooterIdAndUserId", reflect.TypeOf((*MockScooterOccupationRepository)(nil).GetByScooterIdAndUserId), scooterUuid, userUuid)
 }

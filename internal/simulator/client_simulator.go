@@ -1,6 +1,7 @@
 package simulator
 
 import (
+	"github.com/google/uuid"
 	"main/internal/dto"
 	"main/internal/http_client"
 	"main/internal/model"
@@ -17,28 +18,38 @@ func (s ClientSimulator) Run() {
 	time.Sleep(time.Second * 2)
 
 	for {
-		// find first available scooter nearby
+		// 1. find first available scooter nearby
 		scooter := s.findFirstAvailableScooter()
 
-		// try to occupy scooter or start searching new free scooter
+		// 2. try to occupy scooter or start searching new free scooter
 		if !s.scooterClient.Occupy(scooter.Id) {
 			continue
 		}
-		// occupy scooter for some time
+
 		time.Sleep(time.Second * 2)
+		// 3. send first location update
+		if !s.sendLocationUpdate(scooter.Id) {
+			break
+		}
 
-		// release scooter in random location
-		randomLocation := dto.Location{Latitude: randInt(1, 20), Longitude: randInt(1, 20)}
-		s.scooterClient.Release(scooter.Id, randomLocation)
+		time.Sleep(time.Second * 2)
+		// 4. send second location update
+		if !s.sendLocationUpdate(scooter.Id) {
+			break
+		}
 
-		// rest before start new circle
+		// 5. release scooter
+		s.scooterClient.Release(scooter.Id)
+
+		// 6. rest before start new circle
 		time.Sleep(time.Second * 2)
 	}
 }
 
 func (s ClientSimulator) findFirstAvailableScooter() model.Scooter {
 	for {
-		randomLocation := dto.Location{Latitude: randInt(1, 20), Longitude: randInt(1, 20)}
+		latitude, longitude := generateRandomLocationCoordinates()
+		randomLocation := dto.Location{Latitude: latitude, Longitude: longitude}
 		scooters := s.scooterClient.Search(randomLocation)
 
 		if len(scooters) > 0 {
@@ -54,6 +65,17 @@ func (s ClientSimulator) findFirstAvailableScooter() model.Scooter {
 			return scooter
 		}
 	}
+}
+
+func (s ClientSimulator) sendLocationUpdate(scooterId uuid.UUID) bool {
+	latitude, longitude := generateRandomLocationCoordinates()
+	scooterLocationUpdate := dto.ScooterLocationUpdate{Latitude: latitude, Longitude: longitude, Time: time.Now()}
+
+	return s.scooterClient.UpdateScooterLocation(scooterId, scooterLocationUpdate)
+}
+
+func generateRandomLocationCoordinates() (latitude int, longitude int) {
+	return randInt(1, 20), randInt(1, 20)
 }
 
 func randInt(min int, max int) int {
