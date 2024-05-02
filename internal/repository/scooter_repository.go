@@ -4,11 +4,12 @@ import (
 	"database/sql"
 	"github.com/google/uuid"
 	"main/internal/model"
+	"time"
 )
 
 type ScooterRepository interface {
 	FindScootersByArea(latitudeStart int, longitudeStart int, latitudeEnd int, longitudeEnd int) []model.Scooter
-	UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude int, longitude int) error
+	UpdateScooterCoordinatesByScooterId(scooterId uuid.UUID, latitude int, longitude int, time time.Time) error
 	GetByScooterId(scooterId uuid.UUID) (model.Scooter, bool)
 }
 
@@ -57,11 +58,14 @@ func (r mysqlScooterRepository) UpdateScooterCoordinatesByScooterId(
 	scooterId uuid.UUID,
 	latitude int,
 	longitude int,
+	time time.Time,
 ) error {
 	scooterIdAsBinary, _ := scooterId.MarshalBinary()
 
-	query := "UPDATE scooters SET scooters.latitude = ?, scooters.longitude = ? WHERE scooters.id = ?"
-	_, err := r.db.Exec(query, latitude, longitude, scooterIdAsBinary)
+	query := "UPDATE scooters " +
+		"SET scooters.latitude = ?, scooters.longitude = ?, scooters.location_updated_at = ? " +
+		"WHERE scooters.id = ?"
+	_, err := r.db.Exec(query, latitude, longitude, time, scooterIdAsBinary)
 
 	if err != nil {
 		return err

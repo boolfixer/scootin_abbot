@@ -37,6 +37,7 @@ func (h UpdateScooterLocationHandler) Handle(
 		scooterUuid,
 		scooterLocationUpdate.Latitude,
 		scooterLocationUpdate.Longitude,
+		scooterLocationUpdate.Time,
 	)
 
 	if err != nil {
