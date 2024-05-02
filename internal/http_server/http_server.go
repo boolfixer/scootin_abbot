@@ -33,6 +33,7 @@ func NewHttpServer(
 	protected.Use(authMiddleware.Handle())
 	protected.POST("/:id/occupy", scooterController.Occupy)
 	protected.POST("/:id/release", scooterController.Release)
+	protected.PATCH("/:id/update-location", scooterController.UpdateLocation)
 
 	return &HttpServer{router: router}
 }

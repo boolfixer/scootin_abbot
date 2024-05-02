@@ -10,9 +10,10 @@ import (
 )
 
 type ScooterController struct {
-	occupyScooterHandler  *scooter_handler.OccupyScooterHandler
-	releaseScooterHandler *scooter_handler.ReleaseScooterHandler
-	searchScootersHandler *scooter_handler.SearchScootersHandler
+	occupyScooterHandler         *scooter_handler.OccupyScooterHandler
+	releaseScooterHandler        *scooter_handler.ReleaseScooterHandler
+	searchScootersHandler        *scooter_handler.SearchScootersHandler
+	updateScooterLocationHandler *scooter_handler.UpdateScooterLocationHandler
 }
 
 func (c *ScooterController) Search(context *gin.Context) {
@@ -53,14 +54,33 @@ func (c *ScooterController) Release(context *gin.Context) {
 	context.Status(http.StatusNoContent)
 }
 
+func (c *ScooterController) UpdateLocation(context *gin.Context) {
+	scooterId := uuid.MustParse(context.Param("id"))
+	user := context.MustGet("user").(model.User)
+
+	var scooterLocationUpdate dto.ScooterLocationUpdate
+	if err := context.BindJSON(&scooterLocationUpdate); err != nil {
+		return
+	}
+
+	if err := c.updateScooterLocationHandler.Handle(scooterId, user.Id, scooterLocationUpdate); err != nil {
+		context.Error(err)
+		return
+	}
+
+	context.Status(http.StatusNoContent)
+}
+
 func NewScooterController(
 	occupyScooterHandler *scooter_handler.OccupyScooterHandler,
 	releaseScooterHandler *scooter_handler.ReleaseScooterHandler,
 	searchScootersHandler *scooter_handler.SearchScootersHandler,
+	updateScooterLocationHandler *scooter_handler.UpdateScooterLocationHandler,
 ) *ScooterController {
 	return &ScooterController{
-		occupyScooterHandler:  occupyScooterHandler,
-		releaseScooterHandler: releaseScooterHandler,
-		searchScootersHandler: searchScootersHandler,
+		occupyScooterHandler:         occupyScooterHandler,
+		releaseScooterHandler:        releaseScooterHandler,
+		searchScootersHandler:        searchScootersHandler,
+		updateScooterLocationHandler: updateScooterLocationHandler,
 	}
 }
