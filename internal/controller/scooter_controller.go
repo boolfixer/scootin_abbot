@@ -41,12 +41,7 @@ func (c *ScooterController) Release(context *gin.Context) {
 	scooterId := uuid.MustParse(context.Param("id"))
 	user := context.MustGet("user").(model.User)
 
-	var scooterLocation dto.Location
-	if err := context.BindJSON(&scooterLocation); err != nil {
-		return
-	}
-
-	if err := c.releaseScooterHandler.Handle(scooterId, user.Id, scooterLocation); err != nil {
+	if err := c.releaseScooterHandler.Handle(scooterId, user.Id); err != nil {
 		context.Error(err)
 		return
 	}
