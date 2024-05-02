@@ -1,12 +1,27 @@
 version: "3.8"
 
-# @todo: extract password, port and db name into env file
 services:
+  go:
+    image: golang:latest
+    container_name: go
+    volumes:
+      - ./cmd:/app/cmd
+      - ./internal:/app/internal
+      - ./migration:/app/migration
+      - ./.env:/app/.env
+      - ./.env.dist:/app/.env.dist
+      - ./.gitignore:/app/.gitignore
+      - ./README.md:/app/README.md
+      - ./go.mod:/app/go.mod
+      - ./go.sum:/app/go.sum
+    depends_on:
+      - db
+    entrypoint: ["tail", "-f", "/dev/null"]
   db:
     image: mysql:latest
     container_name: db
     ports:
-      - "33306:3306"
+      - "${EXPOSE_DB_PORT}:3306"
     volumes:
       - ./migration:/migration
     environment:
