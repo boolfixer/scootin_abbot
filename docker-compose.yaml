@@ -3,7 +3,7 @@ version: "3.8"
 services:
   go:
     image: golang:latest
-    container_name: go
+    container_name: scootin_aboot__go
     volumes:
       - ./cmd:/app/cmd
       - ./internal:/app/internal
@@ -19,11 +19,12 @@ services:
     entrypoint: ["tail", "-f", "/dev/null"]
   db:
     image: mysql:latest
-    container_name: db
+    container_name: scootin_aboot__db
     ports:
       - "${EXPOSE_DB_PORT}:3306"
     volumes:
       - ./migration:/migration
+      - ./scootin_aboot.sql:/scootin_aboot.sql
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
       MYSQL_DATABASE: scootin_aboot
