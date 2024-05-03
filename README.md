@@ -7,6 +7,7 @@
 
 ### 2. Installation
 
+- git clone git@github.com:boolfixer/scootin_aboot.git
 - cp .env.dist .env
 - docker-compose up -d
 - docker exec scootin_aboot__db bash
