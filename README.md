@@ -12,8 +12,8 @@
 - git clone https://github.com/boolfixer/scootin_aboot.git && cd scootin_aboot
 - cp .env.dist .env
 - docker-compose up -d
-- docker exec scootin_aboot__db bash
-- mysql -uroot -proot scootin_aboot < /scootin_aboot.sql
+- docker exec -it scootin_aboot__db bash
+- mysql -uroot -proot scootin_aboot < /scootin_aboot.sql && exit
 
 ### 3. Run application
 
@@ -60,7 +60,7 @@
 <hr style="border:2px solid"> 
 
 # Potential places to be improved:
-1. Use ORM like [gorm](https://gorm.io/index.html) for entity management.
+1. Use ORM like [gorm](https://gorm.io/index.html) for entity management and sql injection prevention
 2. Add intergenerational and functional tests.
 3. Add logging for more descriptive error investigation.
 4. Error handling with more golang standards.

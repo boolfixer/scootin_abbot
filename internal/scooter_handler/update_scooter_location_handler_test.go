@@ -30,17 +30,7 @@ func TestUpdateScooterLocation(t *testing.T) {
 		handler := NewUpdateScooterLocation(scooterOccupationRepository, scooterRepository)
 		err := handler.Handle(scooterId, userId, scooterLocationUpdate)
 
-		want := reflect.TypeOf(http_error.ConflictError{}).Name()
-		got := reflect.TypeOf(err).Name()
-		if want != got {
-			t.Errorf("failed to assert error; got %q, wanted %q", got, want)
-		}
-
-		want = "Scooter is not occupied by current user."
-		got = err.Error()
-		if want != got {
-			t.Errorf("failed to assert error message; got %q, wanted %q", got, want)
-		}
+		assertError(t, reflect.TypeOf(http_error.ConflictError{}).Name(), "Scooter is not occupied by current user.", err)
 	})
 
 	t.Run("Scooter not found.", func(t *testing.T) {
@@ -65,17 +55,7 @@ func TestUpdateScooterLocation(t *testing.T) {
 		handler := NewUpdateScooterLocation(scooterOccupationRepository, scooterRepository)
 		err := handler.Handle(scooterId, userId, scooterLocationUpdate)
 
-		want := reflect.TypeOf(http_error.NotFoundError{}).Name()
-		got := reflect.TypeOf(err).Name()
-		if want != got {
-			t.Errorf("failed to assert error; got %q, wanted %q", got, want)
-		}
-
-		want = "Scooter not found."
-		got = err.Error()
-		if want != got {
-			t.Errorf("failed to assert error message; got %q, wanted %q", got, want)
-		}
+		assertError(t, reflect.TypeOf(http_error.NotFoundError{}).Name(), "Scooter not found.", err)
 	})
 
 	t.Run("Scooter location is outdated.", func(t *testing.T) {
@@ -101,17 +81,7 @@ func TestUpdateScooterLocation(t *testing.T) {
 		handler := NewUpdateScooterLocation(scooterOccupationRepository, scooterRepository)
 		err := handler.Handle(scooterId, userId, scooterLocationUpdate)
 
-		want := reflect.TypeOf(http_error.ConflictError{}).Name()
-		got := reflect.TypeOf(err).Name()
-		if want != got {
-			t.Errorf("failed to assert error; got %q, wanted %q", got, want)
-		}
-
-		want = "Scooter location is outdated."
-		got = err.Error()
-		if want != got {
-			t.Errorf("failed to assert error message; got %q, wanted %q", got, want)
-		}
+		assertError(t, reflect.TypeOf(http_error.ConflictError{}).Name(), "Scooter location is outdated.", err)
 	})
 
 	t.Run("Failed to update scooter coordinates.", func(t *testing.T) {
@@ -146,17 +116,7 @@ func TestUpdateScooterLocation(t *testing.T) {
 		handler := NewUpdateScooterLocation(scooterOccupationRepository, scooterRepository)
 		err := handler.Handle(scooterId, userId, scooterLocationUpdate)
 
-		want := reflect.TypeOf(http_error.ConflictError{}).Name()
-		got := reflect.TypeOf(err).Name()
-		if want != got {
-			t.Errorf("failed to assert error; got %q, wanted %q", got, want)
-		}
-
-		want = "Failed to update scooter coordinates."
-		got = err.Error()
-		if want != got {
-			t.Errorf("failed to assert error message; got %q, wanted %q", got, want)
-		}
+		assertError(t, reflect.TypeOf(http_error.ConflictError{}).Name(), "Failed to update scooter coordinates.", err)
 	})
 
 	t.Run("Scooter location updated successfully.", func(t *testing.T) {

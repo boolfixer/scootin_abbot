@@ -27,17 +27,7 @@ func TestOccupyScooterHandler(t *testing.T) {
 		handler := NewOccupyScooterHandler(scooterOccupationRepository, scooterRepository)
 		err := handler.Handle(scooterId, userId)
 
-		want := reflect.TypeOf(http_error.NotFoundError{}).Name()
-		got := reflect.TypeOf(err).Name()
-		if want != got {
-			t.Errorf("failed to assert error; got %q, wanted %q", got, want)
-		}
-
-		want = "Scooter not found."
-		got = err.Error()
-		if want != got {
-			t.Errorf("failed to assert error message; got %q, wanted %q", got, want)
-		}
+		assertError(t, reflect.TypeOf(http_error.NotFoundError{}).Name(), "Scooter not found.", err)
 	})
 
 	t.Run("failed to create scooter", func(t *testing.T) {
@@ -55,17 +45,7 @@ func TestOccupyScooterHandler(t *testing.T) {
 		handler := NewOccupyScooterHandler(scooterOccupationRepository, scooterRepository)
 		err := handler.Handle(scooterId, userId)
 
-		want := reflect.TypeOf(http_error.ConflictError{}).Name()
-		got := reflect.TypeOf(err).Name()
-		if want != got {
-			t.Errorf("failed to assert error; got %q, wanted %q", got, want)
-		}
-
-		want = "Scooter has been already occupied."
-		got = err.Error()
-		if want != got {
-			t.Errorf("failed to assert error message; got %q, wanted %q", got, want)
-		}
+		assertError(t, reflect.TypeOf(http_error.ConflictError{}).Name(), "Scooter has been already occupied.", err)
 	})
 
 	t.Run("failed to occupy scooter", func(t *testing.T) {
@@ -88,17 +68,7 @@ func TestOccupyScooterHandler(t *testing.T) {
 		handler := NewOccupyScooterHandler(scooterOccupationRepository, scooterRepository)
 		err := handler.Handle(scooterId, userId)
 
-		want := reflect.TypeOf(http_error.ConflictError{}).Name()
-		got := reflect.TypeOf(err).Name()
-		if want != got {
-			t.Errorf("failed to assert error; got %q, wanted %q", got, want)
-		}
-
-		want = "Scooter has been already occupied."
-		got = err.Error()
-		if want != got {
-			t.Errorf("failed to assert error message; got %q, wanted %q", got, want)
-		}
+		assertError(t, reflect.TypeOf(http_error.ConflictError{}).Name(), "Scooter has been already occupied.", err)
 	})
 
 	t.Run("scooter successfully occupied", func(t *testing.T) {
@@ -125,4 +95,18 @@ func TestOccupyScooterHandler(t *testing.T) {
 			t.Errorf("unexpected error; got %T, wanted %T", err, nil)
 		}
 	})
+}
+
+func assertError(t testing.TB, wantErrorType string, wantErrorMessage string, gotError error) {
+	t.Helper()
+
+	got := reflect.TypeOf(gotError).Name()
+	if wantErrorType != got {
+		t.Errorf("failed to assert error; got %q, wanted %q", got, wantErrorMessage)
+	}
+
+	got = gotError.Error()
+	if wantErrorMessage != got {
+		t.Errorf("failed to assert error message; got %q, wanted %q", got, wantErrorMessage)
+	}
 }
