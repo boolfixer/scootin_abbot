@@ -10,7 +10,7 @@
 - git clone https://github.com/boolfixer/scootin_aboot.git && cd scootin_aboot
 - cp .env.dist .env
 - docker-compose up -d
-- docker exec scootin_aboot__db bash
+- docker exec -it scootin_aboot__db bash
 - mysql -uroot -proot scootin_aboot < /scootin_aboot.sql
 
 ### 3. Run application
