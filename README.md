@@ -25,6 +25,13 @@
 
 # Application description:
 
+### 1. Base concepts:
+
+- There are 3 table: `users`, `scooters` and `scooters_occupations`. 
+- `scooters_occupations` table contains unique index on `scooter_id` field.
+- If there is record in `scooters_occupations`, then such scooter is considered as occupied.
+- On `scooter release` request we remove record from `scooters_occupations` table.
+
 ### 2. Application structure
 
 1. Application entrypoint placed in `cmd/main.go`
