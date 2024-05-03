@@ -25,7 +25,7 @@
 
 # Application description:
 
-### 1. Application structure
+### 2. Application structure
 
 1. Application entrypoint placed in `cmd/main.go`
 2. database migrations placed in `migration/` folder 
@@ -44,8 +44,16 @@
    12. `internal/repository` - business logic
    13. `internal/simulator` - user behaviour simulation
 
-### 2. Used vendors / open-source solutions:
+### 3. Used vendors / open-source solutions:
 
 1. [uber-go](https://github.com/uber-go)
 2. [gin](https://github.com/gin-gonic/gin) 
 3. [database/sql](https://pkg.go.dev/database/sql)
+
+<hr style="border:2px solid"> 
+
+# Potential places to be improved:
+1. Use ORM like [gorm](https://gorm.io/index.html) for entity management.
+2. Add intergenerational and functional tests.
+3. Add logging for more descriptive error investigation.
+4. Error handling with more golang standards.
