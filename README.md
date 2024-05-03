@@ -16,5 +16,4 @@
 ### 3. Run application
 
 - docker exec -it scootin_aboot__go bash 
-- cd /app
-- go run cmd/main.go
+- cd /app && go run cmd/main.go
