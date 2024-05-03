@@ -11,7 +11,7 @@
 - cp .env.dist .env
 - docker-compose up -d
 - docker exec -it scootin_aboot__db bash
-- mysql -uroot -proot scootin_aboot < /scootin_aboot.sql
+- mysql -uroot -proot scootin_aboot < /scootin_aboot.sql && exit
 
 ### 3. Run application
 
